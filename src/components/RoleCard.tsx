@@ -7,11 +7,14 @@ import { useCallback, useState } from "react";
 export default function Roles() {
   const [roles, setRoles] = useState(initailRoles);
 
-  const handleDelete = useCallback((id : string) =>{
-    if(roles.length >= 1){
-      setRoles((prev) => prev.filter((role) => role.id !== id))
-    }
-  },[roles])
+  const handleDelete = useCallback(
+    (id: string) => {
+      if (roles.length >= 1) {
+        setRoles((prev) => prev.filter((role) => role.id !== id));
+      }
+    },
+    [roles]
+  );
 
   return (
     <div className="w-[1000px] rounded-xl border border-dashed mt-3 shadow-sm">
@@ -28,7 +31,7 @@ export default function Roles() {
           </DialogComponentForRole>
         </div>
       </header>
-      {roles &&
+      {roles.length > 0 ? (
         roles.map((role) => (
           <div key={role.id} className="p-4 flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -56,12 +59,20 @@ export default function Roles() {
               <UpdateDialogForRole role={role} setRoles={setRoles}>
                 <button className="text-sm ml-4">Edit</button>
               </UpdateDialogForRole>
-              <button 
-              onClick={() => handleDelete(role.id)}
-              className="text-red-500 text-sm ml-4">Delete</button>
+              <button
+                onClick={() => handleDelete(role.id)}
+                className="text-red-500 text-sm ml-4"
+              >
+                Delete
+              </button>
             </div>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="p-4 text-center text-gray-500">
+          <p>No Roles found. Add a Roles to get started.</p>
+        </div>
+      )}
     </div>
   );
 }

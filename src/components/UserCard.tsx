@@ -35,7 +35,8 @@ export default function Users() {
         </div>
       </header>
 
-      { users && users.map((user) => (
+      { users.length > 0 ? (
+       users.map((user) => (
         <div key={user.id} className="p-4 flex justify-between items-center">
           <div className="flex space-x-2 items-center">
             <User className="w-6 h-6 mr-2" />
@@ -68,7 +69,12 @@ export default function Users() {
             </DropdownMenu>
           </div>
         </div>
-      ))}
+      ))) : (
+        <div className="p-4 text-center text-gray-500">
+          <p>No users found. Add a user to get started.</p>
+        </div>
+
+      )}
     </div>
   );
 }
