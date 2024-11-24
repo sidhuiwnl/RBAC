@@ -68,10 +68,10 @@ export function DialogComponentForUser({
     setUsers((prevUsers) => [...prevUsers, newUser]);
 
     setFormData({
-      name: "",
-      email: "",
-      role: "",
-      status: "",
+      name: " ",
+      email: " ",
+      role: " ",
+      status: " ",
     });
   };
 
@@ -171,16 +171,11 @@ export function UpdateDialogForUser({
   user: User;
   setUsers: React.Dispatch<React.SetStateAction<User[]>>;
 }) {
-  const [formData, setFormData] = useState<{
-    name: string;
-    email: string;
-    role: string;
-    status: string;
-  }>({
-    name: "",
-    email: "",
-    role: "Admin",
-    status: "Active",
+  const [formData, setFormData] = useState({
+    name: user.name || "",
+    email: user.email || "",
+    role: user.role || "Admin",
+    status: user.status || "Active",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -208,10 +203,10 @@ export function UpdateDialogForUser({
     );
 
     setFormData({
-      name: "",
-      email: "",
-      role: "",
-      status: "",
+      name: " ",
+      email: " ",
+      role: " ",
+      status: " ",
     });
   };
 
@@ -231,6 +226,7 @@ export function UpdateDialogForUser({
           </label>
           <input
             id="name"
+            value={formData.name}
             onChange={handleChange}
             type="text"
             className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50   p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm dark:text-white"
@@ -241,6 +237,7 @@ export function UpdateDialogForUser({
             Email
           </label>
           <input
+            value={formData.email}
             id="email"
             onChange={handleChange}
             type="email"
@@ -251,7 +248,10 @@ export function UpdateDialogForUser({
           <label className="font-extrabold" htmlFor="role">
             Role
           </label>
-          <Select onValueChange={(value) => handleSelectChange("role", value)}>
+          <Select
+            value={formData.role}
+            onValueChange={(value) => handleSelectChange("role", value)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Admin" />
             </SelectTrigger>
@@ -267,6 +267,7 @@ export function UpdateDialogForUser({
             Status
           </label>
           <Select
+            value={formData.status}
             onValueChange={(value) => handleSelectChange("status", value)}
           >
             <SelectTrigger>
@@ -451,10 +452,11 @@ export function UpdateDialogForRole({
     description: string;
     permissions: { name: string }[];
   }>({
-    name: "",
-    description: "",
-    permissions: [],
+    name: role.name || "",
+    description: role.description || "",
+    permissions: role.permissions || [],
   });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({
@@ -463,26 +465,30 @@ export function UpdateDialogForRole({
     }));
   };
 
-  const handleCheckboxchange = (value: string) => {
+  const handleCheckboxChange = (permissionName: string) => {
     setFormData((prev) => {
       const permissions = [...prev.permissions];
-      const index = permissions.findIndex((p) => p.name === value);
+      const index = permissions.findIndex((p) => p.name === permissionName);
+
       if (index === -1) {
-        permissions.push({ name: value });
+        permissions.push({ name: permissionName });
       } else {
         permissions.splice(index, 1);
       }
+
       return { ...prev, permissions };
     });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
+    // Update the role data in the setRoles function
     setRoles((prevRoles) =>
       prevRoles.map((r) => (r.id === role.id ? { ...r, ...formData } : r))
     );
 
+    // Reset form data after update
     setFormData({
       name: "",
       description: "",
@@ -497,7 +503,7 @@ export function UpdateDialogForRole({
         <DialogHeader>
           <DialogTitle className="font-extrabold">Update Role</DialogTitle>
           <DialogDescription className="text-sm text-neutral-400">
-            Update Role for the for manangement{" "}
+            Update the role details for the role management system.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
@@ -506,10 +512,11 @@ export function UpdateDialogForRole({
           </label>
           <input
             id="name"
+            value={formData.name}
             onChange={handleChange}
             type="text"
-            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 dark:text-whitep-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
-            placeholder="John Doe"
+            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 dark:text-white p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
+            placeholder="Role Name"
             required
           />
           <label className="font-extrabold" htmlFor="description">
@@ -517,35 +524,27 @@ export function UpdateDialogForRole({
           </label>
           <input
             id="description"
+            value={formData.description}
             required
             onChange={handleChange}
             type="text"
             className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 dark:text-white p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
-            placeholder="Add the description of the role"
+            placeholder="Role Description"
           />
-          <label className="font-extrabold" htmlFor="permission">
-            Permission
-          </label>
+          <label className="font-extrabold">Permissions</label>
           {permissions &&
             permissions.map((permission) => (
-              <div
-                key={permission.id}
-                className="flex items-center space-x-3 text-sm"
-              >
+              <div key={permission.id} className="flex items-center space-x-3 text-sm">
                 <Checkbox
-                  checked={role.permissions?.some(
-                    (p) => p.name === permission.name || false
-                  )}
-                  onCheckedChange={() => {
-                    handleCheckboxchange(permission.name);
-                  }}
+                  checked={formData.permissions.some((p) => p.name === permission.name)}
+                  onCheckedChange={() => handleCheckboxChange(permission.name)}
                 />
                 <label>{permission.name}</label>
                 <p>({permission.description})</p>
               </div>
             ))}
 
-          <div className="flex space-x-2 justify-end ">
+          <div className="flex space-x-2 justify-end">
             <DialogClose className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
               Cancel
             </DialogClose>
