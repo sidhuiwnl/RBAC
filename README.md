@@ -47,7 +47,6 @@ npm run dev
 ## Technology Stack
 
 - **Frontend Framework**: React with TypeScript
-- **State Management**: Zustand
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
 - **Build Tool**: Vite
