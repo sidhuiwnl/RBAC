@@ -51,9 +51,8 @@ export function DialogComponentForUser({
     }));
   };
 
-  const handleSubmit = () => {
-
-  
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     const nextId =
       users.length > 0 ? String(Number(users[users.length - 1].id) + 1) : "1";
@@ -71,14 +70,14 @@ export function DialogComponentForUser({
     setFormData({
       name: "",
       email: "",
-      role: "Admin",
-      status: "Active",
+      role: "",
+      status: "",
     });
   };
 
   return (
     <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="font-extrabold">Add User</DialogTitle>
@@ -86,7 +85,7 @@ export function DialogComponentForUser({
             Add users for the for manangement{" "}
           </DialogDescription>
         </DialogHeader>
-        
+
         <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
           <label className="font-extrabold" htmlFor="user-name">
             Name
@@ -147,10 +146,8 @@ export function DialogComponentForUser({
             </SelectContent>
           </Select>
           <div className="flex space-x-2 justify-end ">
-            <DialogClose asChild>
-              <button className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
-                Cancel
-              </button>
+            <DialogClose className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
+              Cancel
             </DialogClose>
             <button
               className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring bg-zinc-900 text-white mt-2"
@@ -160,7 +157,6 @@ export function DialogComponentForUser({
             </button>
           </div>
         </form>
-        
       </DialogContent>
     </Dialog>
   );
@@ -202,7 +198,9 @@ export function UpdateDialogForUser({
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     setUsers((prevData) =>
       prevData.map((prev) =>
         prev.id === user.id ? { ...prev, ...formData } : prev
@@ -210,11 +208,11 @@ export function UpdateDialogForUser({
     );
 
     setFormData({
-      name : "",
-      email : "",
-      role :"",
-      status : ""
-    })
+      name: "",
+      email: "",
+      role: "",
+      status: "",
+    });
   };
 
   return (
@@ -282,13 +280,11 @@ export function UpdateDialogForUser({
             </SelectContent>
           </Select>
           <div className="flex space-x-2 justify-end ">
-            <DialogClose asChild>
-              <button className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
-                Cancel
-              </button>
+            <DialogClose className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
+              Cancel
             </DialogClose>
             <button
-              onClick={handleSubmit}
+              type="submit"
               className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring bg-zinc-900 text-white mt-2"
             >
               UpdateUser
@@ -348,7 +344,9 @@ export function DialogComponentForRole({
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     const newRole: Role = {
       id: (roles.length + 1).toString(),
       name: formData.name,
@@ -367,7 +365,7 @@ export function DialogComponentForRole({
 
   return (
     <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="font-extrabold">Add Role</DialogTitle>
@@ -384,7 +382,7 @@ export function DialogComponentForRole({
             value={formData.name}
             onChange={handleChange}
             type="text"
-            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 text-black p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
+            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 dark:text-white p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
             placeholder="John Doe"
             required
           />
@@ -397,9 +395,8 @@ export function DialogComponentForRole({
             value={formData.description}
             onChange={handleChange}
             type="text"
-            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 text-black p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
+            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 dark:text-white p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
             placeholder="Add the description of the role"
-            
           />
           <label className="font-extrabold" htmlFor="permission">
             Permission
@@ -424,13 +421,11 @@ export function DialogComponentForRole({
             ))}
 
           <div className="flex space-x-2 justify-end ">
-            <DialogClose asChild>
-              <button className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
-                Cancel
-              </button>
+            <DialogClose className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
+              Cancel
             </DialogClose>
             <button
-              onClick={handleSubmit}
+              type="submit"
               className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring bg-zinc-900 text-white mt-2"
             >
               Add Role
@@ -481,16 +476,18 @@ export function UpdateDialogForRole({
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
     setRoles((prevRoles) =>
       prevRoles.map((r) => (r.id === role.id ? { ...r, ...formData } : r))
     );
 
     setFormData({
-      name : "",
-      description : "",
-      permissions : []
-    })
+      name: "",
+      description: "",
+      permissions: [],
+    });
   };
 
   return (
@@ -511,7 +508,7 @@ export function UpdateDialogForRole({
             id="name"
             onChange={handleChange}
             type="text"
-            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 text-black p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
+            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 dark:text-whitep-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
             placeholder="John Doe"
             required
           />
@@ -523,7 +520,7 @@ export function UpdateDialogForRole({
             required
             onChange={handleChange}
             type="text"
-            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 text-black p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
+            className="rounded-md shadow-sm py-2 text-sm dark:bg-black/50 dark:text-white p-2 border placeholder:dark:text-neutral-400 placeholder:text-sm"
             placeholder="Add the description of the role"
           />
           <label className="font-extrabold" htmlFor="permission">
@@ -549,12 +546,12 @@ export function UpdateDialogForRole({
             ))}
 
           <div className="flex space-x-2 justify-end ">
-            <button className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
+            <DialogClose className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring mt-2">
               Cancel
-            </button>
+            </DialogClose>
 
             <button
-              onClick={handleSubmit}
+              type="submit"
               className="px-4 py-2 rounded-lg border text-sm focus:outline-none focus:ring bg-zinc-900 text-white mt-2"
             >
               Update Role
