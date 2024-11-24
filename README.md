@@ -51,20 +51,6 @@ npm run dev
 - **Icons**: Lucide React
 - **Build Tool**: Vite
 
-## Project Structure
-
-```
-src/
-├── components/        # React components
-│   ├── UserList.tsx
-│   ├── RoleList.tsx
-│   ├── UserModal.tsx
-│   └── RoleModal.tsx
-├── store/            # State management
-│   └── useStore.ts
-├── types/            # TypeScript types
-└── data/            # Mock data
-```
 
 ## Contributing
 
