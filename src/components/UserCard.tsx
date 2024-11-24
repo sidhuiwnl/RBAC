@@ -18,7 +18,7 @@ import {
 
 export default function Users() {
   const [users, setUsers] = useState(initialUsers);
-  const[openDropDown,setOpenDropDown] = useState(false);
+  
 
   const handleDelete = useCallback((id: string) => {
     setUsers((prev) => prev.filter((user) => user.id !== id));
